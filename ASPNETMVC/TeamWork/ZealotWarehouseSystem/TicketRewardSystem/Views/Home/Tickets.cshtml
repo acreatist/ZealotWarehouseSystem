@@ -1,0 +1,112 @@
+﻿@{
+    ViewBag.Title = "Ticket";
+}
+
+<div class="row">
+    <div class="clearfix">
+        <ul class="nav nav-tabs pull-left">
+            <li class="active">
+                <a href="/Home/ReadAllTickets" data-role="refresh-grid">All Issues</a>
+            </li>
+            <li><a href="/Home/ReadOpenTickets" data-role="refresh-grid">Open</a></li>
+            <li><a href="/Home/ReadInProgressTickets" data-role="refresh-grid">In Progress</a></li>
+            <li><a href="/Home/ReadClosedTickets" data-role="refresh-grid">Closed</a></li>
+        </ul>
+        
+        @if (User.Identity.IsAuthenticated)
+        {
+            @Html.ActionLink("Submit Issue", "Create", "Home", new { @class = "btn btn-primary pull-right" })
+            <a href="/Home/ReadMyTickets" class="btn pull-right" data-role="refresh-grid">My Tickets</a>        
+        }
+
+    </div>
+
+    <div class="well well-small">
+        @(Html.Kendo().Grid<TicketRewardSystem.ViewModels.TicketViewModel>()
+        .Name("Tickets")
+        .DataSource(data => data
+            .Ajax()
+            .PageSize(10)
+            .ServerOperation(true)
+            .Read(read => read.Action("ReadAllTickets", "Home"))
+        )
+        .Sortable()
+        .Pageable()
+        .Resizable(resize => resize.Columns(true))
+        .Columns(columns =>
+            {
+                columns.Bound(ticket => ticket.Title).ClientTemplate("<a href='/Home/Details/#: TicketId#'>#:Title#</a>");
+                columns.Bound(ticket => ticket.PostedOn);
+                columns.Bound(ticket => ticket.PostedBy);
+                columns.Bound(ticket => ticket.Status);
+            })
+        .ClientDetailTemplateId("client-template")
+        )
+    </div>
+
+    <p>
+        @Html.ActionLink("Submit Issue", "Create", "Home", new { @class = "btn btn-primary pull-right" })
+    </p>
+</div>
+
+<script id="client-template" type="text/x-kendo-template">
+    <div>Description: #: Description#</div>
+</script>
+
+<script type="text/javascript">
+    function rowClick() {
+
+        console.log("aaa");
+        var propId = this.select().closest("tr").find("td:eq(0)").text();
+
+        location.href = kendo.format('@(Server.UrlDecode(Url.Action("Details", "Home", new { id = "{0}" })))', propId);
+    }
+
+    function deactivateNavItems() {
+        $("ul.nav-tabs li").each(function () {
+            $(this).removeClass("active");
+        });
+    }
+
+    $('a[data-role="refresh-grid"]').click(function (ev) {
+        ev.preventDefault();
+
+        deactivateNavItems();
+
+        if ($(this).parent().is("li")) {
+            $(this).parent().addClass("active");
+        } else {
+            $(this).addClass("active");
+        }
+
+        var action = $(this).attr("href");
+
+        var grid = $("#Tickets").data("kendoGrid");
+        var ds = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: action,
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8"
+                }
+            },
+            schema: { // Describe the result format
+                data: function (data) {
+                    $.each(data.Data, function (idx, elem) {
+                        if (elem.PostedOn) {
+                            elem.PostedOn = kendo.parseDate(elem.PostedOn, "yyyy/MM/dd");
+                        }
+                    });
+
+                    return data.Data;
+                }
+            }
+        });
+
+        ds.fetch(function () {
+            grid.setDataSource(ds);
+            grid.dataSource.read();
+        });
+    });
+</script>

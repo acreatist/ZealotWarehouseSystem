@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<TicketRewardSystem.Models.Achievement>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Achievements";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -19,11 +19,7 @@
                         .Columns(columns =>
                             {
                                 columns.Bound(col => col.AchievementId).Title("Achievement");
-                                columns.Bound(col => col.Title);
-                                columns.Bound(col => col.Text);
-                                columns.Template(@<div class="achievement-logo">
-                                                      <img src="@Url.Content(item.ImageUrl)" alt="Image" width="300px" height="55px" />
-                                                 </div>);
+                                columns.Bound(col => col.Title);                                
                                 columns.Template(@<text>@Html.ActionLink("Edit", "Edit", new { id = item.AchievementId })</text>);
                                 columns.Template(@<text>@Html.ActionLink("Details", "Details", new { id = item.AchievementId })</text>);
                                 columns.Template(@<text>@Html.ActionLink("Delete", "Delete", new { id = item.AchievementId })</text>);
