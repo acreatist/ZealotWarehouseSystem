@@ -39,6 +39,8 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
         {
             var existingTicket = this.Data.Tickets.GetById(ticket.Id);
 
+            //var xa = ModelState.Keys["PostedOn"];
+
             if (ticket != null && ModelState.IsValid)
             {
                 existingTicket.Title = ticket.Title;
