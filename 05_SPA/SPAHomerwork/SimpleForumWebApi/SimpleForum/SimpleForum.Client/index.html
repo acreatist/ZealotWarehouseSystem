@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+
+    <link href="Styles/kendo/kendo.common.css" rel="stylesheet" />
+    <link href="Styles/kendo/kendo.default.css" rel="stylesheet" />
+
+    <script src="Scripts/lib/jquery.min.js"></script>
+    <script src="Scripts/lib/kendo/kendo.web.min.js"></script>
+    <script src="Scripts/lib/rsvp.min.js"></script>
+    
+    <script src="Scripts/app.js"></script>
+    <script src="Scripts/app/postsViewModel.js"></script>
+</head>
+<body>
+    <div id="application"></div>
+
+    <script type="text/x-kendo-template" id="main-layout-template">
+        <div id="wrapper">
+            <header></header>
+
+            <div id="body">body</div>
+
+            <footer></footer>
+        </div>    
+    </script>
+
+    <script type="text/x-kendo-template" id="posts-listing">
+        <ul data-bind='source: allPosts' data-template='post-list-template'></ul>
+    </script>
+
+    <script type="text/kendo-tmpl" id="post-list-template">
+        <li>
+               <a href="\#/posts/#= id #">#: title #</a>
+               <p>#: content #</p>
+        </li>
+    </script>
+
+    <script type="text/kendo-tmpl" id="create-post-view">
+        
+        <div>
+            <label>Title:
+                <input data-bind="value: title" style="display: block;" /></label>
+            <label>Content:
+                <input data-bind="value: content" style="display: block;" /></label>
+            
+            <button data-bind="click: createPost" style="display: block;">Add car</button>
+        </div>
+    </script>
+</body>
+</html>
