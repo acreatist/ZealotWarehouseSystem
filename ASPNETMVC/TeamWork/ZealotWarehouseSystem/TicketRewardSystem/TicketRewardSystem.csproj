@@ -179,6 +179,7 @@
     <Compile Include="Areas\Support\SupportAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="ViewModels\RemoteTicketDataChartViewModel.cs" />
     <Compile Include="ViewModels\RuleViewModel.cs" />
     <Compile Include="ViewModels\TicketViewModel.cs" />
     <Compile Include="Global.asax.cs">

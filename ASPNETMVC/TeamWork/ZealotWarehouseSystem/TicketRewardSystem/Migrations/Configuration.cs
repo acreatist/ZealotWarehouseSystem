@@ -31,51 +31,51 @@ namespace TicketRewardSystem.Migrations
             //    );
             //
 
-            //password of each user is "oassword"
-            var adminUser = CreateOrLoadUser(context, "admin", "admin");
-            var supportUser = CreateOrLoadUser(context, "support", "support");
-            //var regularUser = CreateOrLoadUser(context, "regular", "regular");
+//            //password of each user is "oassword"
+//            var adminUser = CreateOrLoadUser(context, "admin", "admin");
+//            var supportUser = CreateOrLoadUser(context, "support", "support");
+//            //var regularUser = CreateOrLoadUser(context, "regular", "regular");
 
-            context.Tickets.AddOrUpdate(i => i.Title,
-            new Ticket
-            {
-                Title="Not working TFS with VS 2013",
-                Description="Team Foundation Server doest work with Visual Studio 2013 RC. ",
-                PostedBy = adminUser,
-                PostedOn=DateTime.Now,
-                Priority=PriorityEnum.High,
-                Status=StatusEnum.Open
-            },
-            new Ticket
-            {
-                Title = "Bug found in VS 2013 Preview using Code First",
-                Description = "Code first does not generate the database correct.",
-                PostedBy = adminUser,
-                PostedOn = DateTime.Now.AddHours(2),
-                Priority = PriorityEnum.Medium,
-                Status = StatusEnum.Open
-            },
-            new Ticket
-            {
-                Title = "Localization issue when updating to Q1 2013 (2013.1 319)",
-                Description = @"If you have just updated your project to version 2013.1.319 which is the official Q1 of 2013 and the widgets are no longer localized then you need to replace the satellite assemblies with new ones.
-                The actual reason is the satellite assemblies inside the folder which contains the main Kendo DLL that you refer :",
-                PostedBy = adminUser,
-                PostedOn = DateTime.Now.AddHours(2),
-                Priority = PriorityEnum.Medium,
-                Status = StatusEnum.Open
-            },
-            new Ticket
-            {
-                Title = "Getting wrong path for texture file - 500 error",
-                Description = @"This is a weird problem.  The issue occurs only occasionally.  There is an image file in the  (a Kendo UI file).  Occasionally when I try to create a new in the Scheduler I will get a 500 error.  Here is the message:
-                NetworkError: 500 Internal Server Error - http://mywebsite.azurewebsites.net/error/Error?aspxerrorpath=/Sessions/textures/highlight.png",
-                PostedBy = adminUser,
-                PostedOn = DateTime.Now.AddHours(2),
-                Priority = PriorityEnum.Medium,
-                Status = StatusEnum.Open
-            }
-                );
+//            context.Tickets.AddOrUpdate(i => i.Title,
+//            new Ticket
+//            {
+//                Title="Not working TFS with VS 2013",
+//                Description="Team Foundation Server doest work with Visual Studio 2013 RC. ",
+//                PostedBy = adminUser,
+//                PostedOn=DateTime.Now,
+//                Priority=PriorityEnum.High,
+//                Status=StatusEnum.Open
+//            },
+//            new Ticket
+//            {
+//                Title = "Bug found in VS 2013 Preview using Code First",
+//                Description = "Code first does not generate the database correct.",
+//                PostedBy = adminUser,
+//                PostedOn = DateTime.Now.AddHours(2),
+//                Priority = PriorityEnum.Medium,
+//                Status = StatusEnum.Open
+//            },
+//            new Ticket
+//            {
+//                Title = "Localization issue when updating to Q1 2013 (2013.1 319)",
+//                Description = @"If you have just updated your project to version 2013.1.319 which is the official Q1 of 2013 and the widgets are no longer localized then you need to replace the satellite assemblies with new ones.
+//                The actual reason is the satellite assemblies inside the folder which contains the main Kendo DLL that you refer :",
+//                PostedBy = adminUser,
+//                PostedOn = DateTime.Now.AddHours(2),
+//                Priority = PriorityEnum.Medium,
+//                Status = StatusEnum.Open
+//            },
+//            new Ticket
+//            {
+//                Title = "Getting wrong path for texture file - 500 error",
+//                Description = @"This is a weird problem.  The issue occurs only occasionally.  There is an image file in the  (a Kendo UI file).  Occasionally when I try to create a new in the Scheduler I will get a 500 error.  Here is the message:
+//                NetworkError: 500 Internal Server Error - http://mywebsite.azurewebsites.net/error/Error?aspxerrorpath=/Sessions/textures/highlight.png",
+//                PostedBy = adminUser,
+//                PostedOn = DateTime.Now.AddHours(2),
+//                Priority = PriorityEnum.Medium,
+//                Status = StatusEnum.Open
+//            }
+//                );
         }
 
         private ApplicationUser CreateOrLoadUser(ApplicationDbContext context,string username, string rolename)

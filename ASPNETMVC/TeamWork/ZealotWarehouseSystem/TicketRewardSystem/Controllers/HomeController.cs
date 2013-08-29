@@ -104,6 +104,21 @@ namespace TicketRewardSystem.Controllers
             return View(ticketView);
         }
 
+        public ActionResult RemoteData()
+        {
+
+            int openTicketsCount = this.db.Tickets.All().Where(t=>t.Status==StatusEnum.Open).Count();
+            int inProgressTicketsCount = this.db.Tickets.All().Where(t => t.Status == StatusEnum.InProgress).Count();
+            int closedTicketsCount = this.db.Tickets.All().Where(t => t.Status == StatusEnum.Resolved).Count();
+
+            return Json(new List<dynamic>(){
+                new  { Status = "Open", Value = openTicketsCount },
+                new  { Status = "InProgress", Value = inProgressTicketsCount },
+                new  { Status = "Closed", Value = closedTicketsCount}
+            
+            });
+        }
+
         public ActionResult Create()
         {
             return View();
