@@ -39,13 +39,13 @@ namespace TicketRewardSystem.Areas.Administration.ViewModels
 
         public string PostedBy { get; set; }
 
-        [DataType(DataType.DateTime)]
+        //[DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode=true,DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime PostedOn { set; get; }
 
-        [DataType(DataType.DateTime)]
+        //[DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
-        public DateTime ResolvedOn { set; get; }
+        public Nullable<DateTime> ResolvedOn { set; get; }
 
         public string AssignedTo { set; get; }
 

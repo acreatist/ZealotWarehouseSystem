@@ -60,9 +60,11 @@
     @(Html.Kendo().DateTimePicker()
                 .Name("datetimepickerresolvedOn")
 
-        .Value(DateTime.Now))
+        .Value(DateTime.Now))  
     @Html.ValidationMessageFor(model => model.ResolvedOn)
 </div>
+
+
 
 <div class="editor-label">
     @Html.LabelFor(model => model.Priority)
