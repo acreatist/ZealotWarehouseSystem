@@ -1,18 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
+using System.Web.Mvc;
+using TicketRewardSystem.Models;
 
 namespace TicketRewardSystem.ViewModels
 {
     public class TicketViewModel
     {
+        public static Expression<Func<Ticket, TicketViewModel>> FromTicket
+        {
+            get
+            {
+                return ticket => new TicketViewModel
+                {   
+                    TicketId = ticket.TicketId,
+                    Title = ticket.Title,
+                    Description = ticket.Description,
+                    PostedOn = ticket.PostedOn,
+                    PostedBy = ticket.PostedBy.UserName,
+                    Status = ticket.Status
+                };
+            }
+        }
         public int TicketId { get; set; }
 
         public string Title { get; set; }
 
+        [AllowHtml]
         public string Description { get; set; }
 
+        
         public DateTime PostedOn { get; set; }
 
 
@@ -20,6 +41,6 @@ namespace TicketRewardSystem.ViewModels
 
         public string Priority { get; set; }
 
-        public string Status { get; set; }
+        public StatusEnum Status { get; set; }
     }
 }

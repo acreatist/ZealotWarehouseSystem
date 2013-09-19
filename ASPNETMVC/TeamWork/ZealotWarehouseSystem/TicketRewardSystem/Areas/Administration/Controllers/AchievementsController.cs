@@ -15,11 +15,18 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
     {
         private UowData db = new UowData();
         private const string DefaultImgUrl = "~/img/achievement-default.gif";
+        private const string DefaultImgPathFolder = "~/img/";
 
         // GET: /Administration/Achievements/
         public ActionResult Index()
         {
             return View(db.Achievements.All().ToList());
+        }
+
+        public JsonResult GetAll()
+        {
+            var allAchievements = db.Achievements.All().ToList();
+            return Json(allAchievements, JsonRequestBehavior.AllowGet);
         }
 
         // GET: /Administration/Achievements/Details/5

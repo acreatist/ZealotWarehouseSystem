@@ -13,47 +13,104 @@ namespace TicketRewardSystem.Controllers
 {
     public class HomeController : Controller
     {
+        private UowData db;
+
+        public HomeController()
+        {
+            this.db = db = new UowData();
+        }
+
         public ActionResult Index()
         {
-            var db = new UowData();
-
-            var tickets = db.Tickets.All();
+            var tickets = db.Tickets.All().Select(TicketViewModel.FromTicket);
 
             return View(tickets);
         }
 
-        public JsonResult TicketsRead([DataSourceRequest]DataSourceRequest request)
+        public ActionResult ReadAllTickets([DataSourceRequest]DataSourceRequest request, string a)
         {
-            var db = new UowData();
+            var tickets = db.Tickets.All().Select(TicketViewModel.FromTicket);
+            var result = tickets.ToDataSourceResult(request);
 
-            var tickets = db.Tickets.All();
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
 
-            DataSourceResult result = tickets.ToDataSourceResult(request, ticket => new TicketViewModel
+        [HttpGet]
+        public ActionResult ReadAllTickets([DataSourceRequest]DataSourceRequest request)
+        {
+            var tickets = db.Tickets.All().Select(TicketViewModel.FromTicket);
+            var result = tickets.ToDataSourceResult(request);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult ReadOpenTickets([DataSourceRequest]DataSourceRequest request)
+        {
+            var ticketsOpen = db.Tickets.All().Where(t => t.Status == StatusEnum.Open).Select(TicketViewModel.FromTicket);
+            var result = ticketsOpen.ToDataSourceResult(request);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult ReadInProgressTickets([DataSourceRequest]DataSourceRequest request)
+        {
+            var ticketsOpen = db.Tickets.All().Where(t => t.Status == StatusEnum.InProgress).Select(TicketViewModel.FromTicket);
+            var result = ticketsOpen.ToDataSourceResult(request);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult ReadClosedTickets([DataSourceRequest]DataSourceRequest request)
+        {
+            var ticketsOpen = db.Tickets.All().Where(t => t.Status == StatusEnum.Resolved).Select(TicketViewModel.FromTicket);
+            var result = ticketsOpen.ToDataSourceResult(request);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Details(int id)
+        {
+            var ticket = this.db.Tickets.GetById(id);
+            var ticketDescription = HttpUtility.HtmlDecode(ticket.Description);
+            var ticketView = new TicketViewModel
             {
                 TicketId = ticket.TicketId,
                 Title = ticket.Title,
-                Description = ticket.Description,
+                Description = ticketDescription,
                 PostedOn = ticket.PostedOn,
                 PostedBy = ticket.PostedBy.UserName
-            });
+            };
 
-            var jsonified = Json(result, JsonRequestBehavior.AllowGet);
-
-            return jsonified;
+            return View(ticketView);
         }
 
-        public ActionResult About()
+        public ActionResult Create()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
-        public ActionResult Contact()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Ticket ticket)
         {
-            ViewBag.Message = "Your contact page.";
+            if (ModelState.IsValid)
+            {
+                var currUser = db.Users.All().FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            return View();
+                ticket.PostedOn = DateTime.Now;
+                ticket.Status = StatusEnum.Open;
+                ticket.PostedBy = currUser;
+                ticket.Description = HttpUtility.HtmlDecode(ticket.Description);
+
+                db.Tickets.Add(ticket);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(ticket);
         }
     }
 }

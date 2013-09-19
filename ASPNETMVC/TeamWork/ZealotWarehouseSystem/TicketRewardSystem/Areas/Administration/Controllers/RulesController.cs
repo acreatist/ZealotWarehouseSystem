@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using TicketRewardSystem.Models;
 using TicketRewardSystem.Repository;
+using TicketRewardSystem.ViewModels;
 
 namespace TicketRewardSystem.Areas.Administration.Controllers
 {
@@ -18,7 +19,7 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
         // GET: /Administration/Rules/
         public ActionResult Index()
         {
-            return View(db.Rules.All().ToList());
+            return View(db.Rules.All().Include("Achievement").ToList());
         }
 
         // GET: /Administration/Rules/Details/5
@@ -38,7 +39,7 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
 
         // GET: /Administration/Rules/Create
         public ActionResult Create()
-        {
+        {           
             return View();
         }
 
@@ -49,11 +50,22 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
 		// Example: public ActionResult Update([Bind(Include="ExampleProperty1,ExampleProperty2")] Model model)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(AchievementRule achievementrule)
-        {
-            if (ModelState.IsValid)
+        public ActionResult Create(RuleViewModel achievementrule)
+        {           
+            if (achievementrule != null && ModelState.IsValid)
             {
-                db.Rules.Add(achievementrule);
+                AchievementRule newRule = new AchievementRule()
+                {
+                    AchievementRuleId = achievementrule.AchievementRuleId,
+                    Title = achievementrule.Title,
+                    TicketsCount = achievementrule.TicketsCount,
+                    TimespanDays = achievementrule.TimespanDays,
+                    Priority = achievementrule.Priority                    
+                };
+                var existingAch = db.Achievements.GetById((int)achievementrule.Achievement);
+                newRule.Achievement = existingAch;
+
+                db.Rules.Add(newRule);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -73,9 +85,12 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
             {
                 return HttpNotFound();
             }
-            return View(achievementrule);
+            RuleViewModel model = ConvertToViewModel(achievementrule);
+            
+            return View(model);
         }
 
+       
         // POST: /Administration/Rules/Edit/5
 		// To protect from over posting attacks, please enable the specific properties you want to bind to, for 
 		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -83,15 +98,24 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
 		// Example: public ActionResult Update([Bind(Include="ExampleProperty1,ExampleProperty2")] Model model)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(AchievementRule achievementrule)
+        public ActionResult Edit(RuleViewModel achievementrule)
         {
-            if (ModelState.IsValid)
-            {
-                db.Rules.Update(achievementrule);
+            AchievementRule existingRule = db.Rules.GetById((int)achievementrule.AchievementRuleId);
+
+            if (existingRule != null && ModelState.IsValid)
+            {                                   
+                existingRule.Title = achievementrule.Title;
+                existingRule.TicketsCount = achievementrule.TicketsCount;
+                existingRule.TimespanDays = achievementrule.TimespanDays;
+                existingRule.Priority = achievementrule.Priority;                
+               
+                var existingAch = db.Achievements.GetById((int)achievementrule.Achievement);
+                existingRule.Achievement = existingAch;
+                //db.Rules.Update(existingRule);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(achievementrule);
+            return View(existingRule);
         }
 
         // GET: /Administration/Rules/Delete/5
@@ -125,5 +149,20 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
             db.Dispose();
             base.Dispose(disposing);
         }
+
+        private RuleViewModel ConvertToViewModel(AchievementRule achievementrule)
+        {
+            RuleViewModel model = new RuleViewModel()
+            {
+                AchievementRuleId = achievementrule.AchievementRuleId,
+                Title = achievementrule.Title,
+                TicketsCount = achievementrule.TicketsCount,
+                TimespanDays = achievementrule.TimespanDays,
+                Priority = achievementrule.Priority                
+            };
+            model.Achievement = achievementrule.Achievement != null ? achievementrule.Achievement.AchievementId : 0;
+            return model;
+        }
+
     }
 }
