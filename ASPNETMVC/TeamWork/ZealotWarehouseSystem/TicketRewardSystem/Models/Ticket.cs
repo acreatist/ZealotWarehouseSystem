@@ -16,11 +16,15 @@ namespace TicketRewardSystem.Models
 
         [Required]
         public string Description { get; set; }
-                
+
+        [DataType(DataType.DateTime)]
         public DateTime PostedOn { get; set; }
+        [DataType(DataType.DateTime)]
         public Nullable<DateTime> ResolvedOn { get; set; }
         public virtual ApplicationUser PostedBy { get; set; }
         public virtual ApplicationUser AssignedTo { get; set; }
+
+        
         public PriorityEnum Priority { get; set; }
         public StatusEnum Status { get; set; }
     }
