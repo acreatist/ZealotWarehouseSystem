@@ -22,13 +22,17 @@ namespace TicketRewardSystem.Models
         public string Description { get; set; }
 
         [DataType(DataType.DateTime)]
+        [Display(AutoGenerateField = false)]
         public DateTime PostedOn { get; set; }
+
         [DataType(DataType.DateTime)]
+        [Editable(false)]
+        [ScaffoldColumn(false)]
         public Nullable<DateTime> ResolvedOn { get; set; }
         public virtual ApplicationUser PostedBy { get; set; }
         public virtual ApplicationUser AssignedTo { get; set; }
 
-        
+
         public PriorityEnum Priority { get; set; }
         public StatusEnum Status { get; set; }
     }
