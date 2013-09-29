@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using TicketRewardSystem.Areas.Administration.ViewModels;
 using TicketRewardSystem.Repository;
 using TicketRewardSystem.Models;
@@ -33,6 +34,22 @@ namespace TicketRewardSystem.Areas.Support.Controllers
         //    DataSourceResult result = tickets.ToDataSourceResult(request);
         //    return Json(result, JsonRequestBehavior.AllowGet);
         //}
+
+        public ActionResult GetTicket([DataSourceRequest]DataSourceRequest request, int id)
+        {
+            
+            var username = this.User.Identity.GetUserName();
+            var userId = this.User.Identity.GetUserId();
+
+            var currentSupportUser = this.Data.Users.All().FirstOrDefault(x => x.Id == userId);
+
+            var ticket = Data.Tickets.All().FirstOrDefault(x => x.TicketId == id);
+            ticket.AssignedTo = currentSupportUser;
+            ticket.Status = StatusEnum.InProgress;
+            Data.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
 
         public ActionResult ReadAllTickets([DataSourceRequest]DataSourceRequest request, string a)
         {

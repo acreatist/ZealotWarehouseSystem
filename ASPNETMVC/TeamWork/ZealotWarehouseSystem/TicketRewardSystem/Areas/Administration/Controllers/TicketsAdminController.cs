@@ -47,16 +47,17 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
 
             if (ticket != null && ModelState.IsValid)
             {
-                var xah = this.Data.Users.All().FirstOrDefault(x => x.UserName == ticket.PostedBy);
+                //var xah = this.Data.Users.All().FirstOrDefault(x => x.UserName == ticket.PostedBy);
                 existingTicket.Title = ticket.Title;
                 existingTicket.Description = ticket.Description;
                 existingTicket.PostedBy = this.Data.Users.All().FirstOrDefault(x => x.UserName == ticket.PostedBy);
                 existingTicket.Status = ticket.Status;
                 existingTicket.Priority = ticket.Priority;
+                //existingTicket.AssignedTo = this.Data.Users.All().FirstOrDefault(x => x.UserName == ticket.AssignedTo);
                 ticket.ResolvedOn = existingTicket.ResolvedOn;
                 ticket.PostedOn = existingTicket.PostedOn;
-                
-                if (ticket.AssignedTo != null)
+
+                if (!String.IsNullOrEmpty(ticket.AssignedTo))
                 {
                     existingTicket.AssignedTo = this.Data.Users.All().FirstOrDefault(x => x.UserName == ticket.AssignedTo);
                 }

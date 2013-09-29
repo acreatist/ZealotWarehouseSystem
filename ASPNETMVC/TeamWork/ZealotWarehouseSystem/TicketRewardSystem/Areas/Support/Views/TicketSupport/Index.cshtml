@@ -39,6 +39,7 @@
                 columns.Bound(ticket => ticket.AssignedTo);
                 columns.Bound(ticket => ticket.Priority);
                 columns.Bound(ticket => ticket.Status);
+                columns.Template(@<text></text>).ClientTemplate("<a href='"+Url.Action("GetTicket","TicketSupport",new { area="Support"})+"/#=Id#'>Get</a>");
             })
         .ClientDetailTemplateId("client-template")
         )

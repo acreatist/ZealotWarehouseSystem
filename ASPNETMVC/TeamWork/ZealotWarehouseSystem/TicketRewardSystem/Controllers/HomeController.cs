@@ -13,8 +13,12 @@ namespace TicketRewardSystem.Controllers
 {
     public class HomeController : Controller
     {
-        private UowData db;
+        private IUowData db;
 
+        public HomeController(IUowData uowData)
+        {
+            this.db = uowData;
+        }
         public HomeController()
         {
             this.db = db = new UowData();
