@@ -37,3 +37,9 @@ input[type="checkbox"].input-validation-error {
 a.btn.pull-right {
     margin-left: 10px;
 }
+
+/* Custom styles */
+div#container-details {
+    height: 400px;
+    max-height: 50%
+}

@@ -3,46 +3,73 @@
 }
 @model TicketRewardSystem.ViewModels.TicketViewModel
 
-<div class="row">
-    <section class="span8">
-        <h2>@Model.Title</h2>
-        
-        <p class="lead"><strong class="muted">Description:</strong>@Html.Raw(Model.Description)</p>
-    </section>
+<div id="container-details">
+    @Html.ActionLink("Back to list", "Index")
+    <div class="row">
+        <section class="span8">
+            <h2>@Model.Title</h2>
 
-    <aside class="span4">
-        <dl class="dl-horizontal">
-            <dt>Status:</dt>
-            <dd>
-                @{
-                    var badgeClass = "badge";
-                    switch (Model.Status)
-                    {
-                        case TicketRewardSystem.Models.StatusEnum.Open:
-                            badgeClass += " badge-success";
-                            break;
-                        case TicketRewardSystem.Models.StatusEnum.InProgress:
-                            badgeClass += " badge-warning";
-                            break;
-                        case TicketRewardSystem.Models.StatusEnum.Resolved:
-                            badgeClass += " badge-info";
-                            break;
-                        default:
-                            break;
+            <p class="lead"><strong class="muted">Description:</strong>@Html.Raw(Model.Description)</p>
+        </section>
+
+        <aside class="span4">
+            <dl class="dl-horizontal">
+                <dt>Status:</dt>
+                <dd>
+                    @{
+                        var badgeClass = "badge";
+                        switch (Model.Status)
+                        {
+                            case TicketRewardSystem.Models.StatusEnum.Open:
+                                badgeClass += " badge-success";
+                                break;
+                            case TicketRewardSystem.Models.StatusEnum.InProgress:
+                                badgeClass += " badge-warning";
+                                break;
+                            case TicketRewardSystem.Models.StatusEnum.Resolved:
+                                badgeClass += " badge-info";
+                                break;
+                            default:
+                                break;
+                        }
                     }
-                }
-                <span class="@badgeClass">@Model.Status.ToString()</span>
-            </dd>
-        
-            <dt>Date posted:</dt>
-            <dd>@Model.PostedOn</dd>
-        
-            <dt>Posted By:</dt>
-            <dd>@Model.PostedBy</dd>
+                    <span class="@badgeClass">@Model.Status.ToString()</span>
+                </dd>
 
-        </dl>
-        <div>
-            @Html.ActionLink("Mark as Resolved", "ResolveTicket", new { id = Model.TicketId })
-        </div>        
-    </aside>
+                <dt>Date posted:</dt>
+                <dd>@Model.PostedOn</dd>
+
+                <dt>Posted By:</dt>
+                <dd>@Model.PostedBy</dd>
+
+            </dl>
+
+            @if (Model.Status != TicketRewardSystem.Models.StatusEnum.Resolved)
+            {
+                <div id="link-resolve">
+                    @Ajax.ActionLink("Mark as Resolved", "ResolveTicket", new { id = Model.TicketId }, new AjaxOptions()
+                                                                {
+                                                                    HttpMethod = "POST",
+                                                                    InsertionMode = InsertionMode.Replace,
+                                                                    UpdateTargetId = "unlocked",
+                                                                    OnSuccess = "setResolvedStatus"
+                                                                })
+                </div>
+            }
+
+        </aside>
+    </div>
+    <div id="unlocked"></div>
 </div>
+
+
+
+@section Scripts {
+    <script>
+        function setResolvedStatus() {
+            $("span.badge").removeClass("badge-warning badge-info").addClass("badge-success").text("Resolved");
+            $("#link-resolve").hide();
+            $("#unlocked").fadeOut(8000);
+        }
+    </script>
+}

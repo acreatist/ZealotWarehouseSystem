@@ -5,13 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
 using TicketRewardSystem.Areas.Administration.ViewModels;
 using TicketRewardSystem.Repository;
 using TicketRewardSystem.Models;
+using TicketRewardSystem.ViewModels;
+using Microsoft.AspNet.Identity;
 
 namespace TicketRewardSystem.Areas.Support.Controllers
 {
+    [Authorize(Roles="admin, support")]
     public class TicketSupportController : Controller
     {
         protected IUowData Data { set; get; }
@@ -35,20 +37,21 @@ namespace TicketRewardSystem.Areas.Support.Controllers
         //    return Json(result, JsonRequestBehavior.AllowGet);
         //}
 
-        public ActionResult GetTicket([DataSourceRequest]DataSourceRequest request, int id)
+        public ActionResult Details(int id)
         {
-            
-            var username = this.User.Identity.GetUserName();
-            var userId = this.User.Identity.GetUserId();
+            var ticket = this.Data.Tickets.GetById(id);
+            var model = new TicketViewModel()
+            {
+                TicketId = ticket.TicketId,
+                Description = ticket.Description,
+                PostedBy = ticket.PostedBy.UserName,
+                PostedOn = ticket.PostedOn,
+                Priority = ticket.Priority.ToString(),
+                Status = ticket.Status,
+                Title = ticket.Title
+            };
 
-            var currentSupportUser = this.Data.Users.All().FirstOrDefault(x => x.Id == userId);
-
-            var ticket = Data.Tickets.All().FirstOrDefault(x => x.TicketId == id);
-            ticket.AssignedTo = currentSupportUser;
-            ticket.Status = StatusEnum.InProgress;
-            Data.SaveChanges();
-
-            return RedirectToAction("Index");
+            return View(model);
         }
 
         public ActionResult ReadAllTickets([DataSourceRequest]DataSourceRequest request, string a)
@@ -68,6 +71,20 @@ namespace TicketRewardSystem.Areas.Support.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetMyAchievements([DataSourceRequest]DataSourceRequest request)
+        {
+            var currentUser = User.Identity.GetUserId();
+            var user = this.Data.Users.All().FirstOrDefault(u => u.Id == currentUser);
+            var achievements = user.Achievements.Select(a => new AchievementViewModel()
+                {
+                    AchievementId = a.AchievementId,
+                    ImageUrl = a.ImageUrl,
+                    Title = a.Title
+                });
+
+            return Json(achievements.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult ResolveTicket(int id)
         {
             var ticket = this.Data.Tickets.GetById(id);
@@ -84,13 +101,8 @@ namespace TicketRewardSystem.Areas.Support.Controllers
             this.Data.SaveChanges();
 
             List<Achievement> unlocked = ResolveRulesAndAchievements(officer);
-            if (unlocked.Count != 0)
-            {
-                ViewBag.UnlockedAchievements = unlocked;
-            }
 
-            // TODO: Change redirection
-            return View("Index");
+            return PartialView("_AchievementUnlocked", unlocked);           
         }
 
         private List<Achievement> ResolveRulesAndAchievements(ApplicationUser officer)
