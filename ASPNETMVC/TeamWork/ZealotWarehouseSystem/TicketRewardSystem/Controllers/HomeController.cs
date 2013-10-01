@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using TicketRewardSystem.Models;
+using TicketRewardSystem.Repository;
 
 namespace TicketRewardSystem.Controllers
 {
@@ -10,7 +12,11 @@ namespace TicketRewardSystem.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            var db = new UowData();
+
+            var tickets = db.Tickets.All();
+
+            return View(tickets);
         }
 
         public ActionResult About()
