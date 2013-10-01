@@ -18,7 +18,7 @@ namespace TicketRewardSystem.Controllers
     {
         public AccountController() 
         {
-            IdentityManager = new AuthenticationIdentityManager(new IdentityStore());
+            IdentityManager = new AuthenticationIdentityManager(new IdentityStore(new ApplicationDbContext()));
         }
 
         public AccountController(AuthenticationIdentityManager manager)
@@ -86,7 +86,7 @@ namespace TicketRewardSystem.Controllers
             if (ModelState.IsValid)
             {
                 // Create a local login before signing in the user
-                var user = new User(model.UserName);
+                var user = new ApplicationUser { UserName = model.UserName };
                 var result = await IdentityManager.Users.CreateLocalUserAsync(user, model.Password);
                 if (result.Success)
                 {
@@ -246,7 +246,7 @@ namespace TicketRewardSystem.Controllers
             if (ModelState.IsValid)
             {
                 // Get the information about the user from the external login provider
-                IdentityResult result = await IdentityManager.Authentication.CreateAndSignInExternalUserAsync(AuthenticationManager, new User(model.UserName));
+                IdentityResult result = await IdentityManager.Authentication.CreateAndSignInExternalUserAsync(AuthenticationManager, new ApplicationUser { UserName = model.UserName });
                 if (result.Success)
                 {
                     return RedirectToLocal(returnUrl);
