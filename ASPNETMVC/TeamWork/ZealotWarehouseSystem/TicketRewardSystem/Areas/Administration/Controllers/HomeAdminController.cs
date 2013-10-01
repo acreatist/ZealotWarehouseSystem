@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace TicketRewardSystem.Areas.Administration.Controllers
 {
-    public class HomeController : Controller
+    public class HomeAdminController : Controller
     {
         //
         // GET: /Administration/Home/
