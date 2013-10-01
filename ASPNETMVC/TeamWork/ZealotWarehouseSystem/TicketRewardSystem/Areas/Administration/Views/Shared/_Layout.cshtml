@@ -16,9 +16,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
+                @Html.ActionLink("Zealot administrators", "Index", "Home", null, new { @class = "brand" })
                 <div class="nav-collapse collapse">
                     <ul class="nav">
+                        <li>@Html.ActionLink("Home Page", "Index", "Home", new { area = "" }, null)</li>
+                        <li>@Html.ActionLink("View rules", "Index", "Rules")</li>                        
                     </ul>
+                    @*@Html.Partial("_LoginPartial")*@
                 </div>
             </div>
         </div>

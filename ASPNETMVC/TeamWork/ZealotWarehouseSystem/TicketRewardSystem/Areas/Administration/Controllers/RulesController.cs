@@ -27,12 +27,12 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AchievementRule rule = db.Rules.Find(id);
-            if (rule == null)
+            AchievementRule achievementrule = db.Rules.Find(id);
+            if (achievementrule == null)
             {
                 return HttpNotFound();
             }
-            return View(rule);
+            return View(achievementrule);
         }
 
         // GET: /Administration/Rules/Create
@@ -48,16 +48,16 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
 		// Example: public ActionResult Update([Bind(Include="ExampleProperty1,ExampleProperty2")] Model model)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(AchievementRule rule)
+        public ActionResult Create(AchievementRule achievementrule)
         {
             if (ModelState.IsValid)
             {
-                db.Rules.Add(rule);
+                db.Rules.Add(achievementrule);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(rule);
+            return View(achievementrule);
         }
 
         // GET: /Administration/Rules/Edit/5
@@ -67,12 +67,12 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AchievementRule rule = db.Rules.Find(id);
-            if (rule == null)
+            AchievementRule achievementrule = db.Rules.Find(id);
+            if (achievementrule == null)
             {
                 return HttpNotFound();
             }
-            return View(rule);
+            return View(achievementrule);
         }
 
         // POST: /Administration/Rules/Edit/5
@@ -82,15 +82,15 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
 		// Example: public ActionResult Update([Bind(Include="ExampleProperty1,ExampleProperty2")] Model model)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(AchievementRule rule)
+        public ActionResult Edit(AchievementRule achievementrule)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(rule).State = EntityState.Modified;
+                db.Entry(achievementrule).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(rule);
+            return View(achievementrule);
         }
 
         // GET: /Administration/Rules/Delete/5
@@ -100,12 +100,12 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
             {
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AchievementRule rule = db.Rules.Find(id);
-            if (rule == null)
+            AchievementRule achievementrule = db.Rules.Find(id);
+            if (achievementrule == null)
             {
                 return HttpNotFound();
             }
-            return View(rule);
+            return View(achievementrule);
         }
 
         // POST: /Administration/Rules/Delete/5
@@ -113,8 +113,8 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            AchievementRule rule = db.Rules.Find(id);
-            db.Rules.Remove(rule);
+            AchievementRule achievementrule = db.Rules.Find(id);
+            db.Rules.Remove(achievementrule);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
