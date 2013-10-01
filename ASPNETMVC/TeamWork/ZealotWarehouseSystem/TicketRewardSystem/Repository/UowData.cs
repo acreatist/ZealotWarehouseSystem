@@ -30,11 +30,11 @@
             }
         }
 
-        public IRepository<Rule> Rules
+        public IRepository<AchievementRule> Rules
         {
             get
             {
-                return this.GetRepository<Rule>();
+                return this.GetRepository<AchievementRule>();
             }
         }
 

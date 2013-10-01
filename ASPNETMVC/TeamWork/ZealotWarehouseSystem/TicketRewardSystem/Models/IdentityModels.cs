@@ -19,7 +19,7 @@ namespace TicketRewardSystem.Models
     public class ApplicationDbContext : IdentityDbContextWithCustomUser<ApplicationUser>
     {
         public DbSet<Ticket> Tickets { get; set; }
-        public DbSet<Rule> Rules { get; set; }
+        public DbSet<AchievementRule> Rules { get; set; }
         public DbSet<Achievement> Achievements { get; set; }
     }
 }

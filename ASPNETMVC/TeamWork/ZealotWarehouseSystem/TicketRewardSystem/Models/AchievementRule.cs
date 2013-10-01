@@ -6,9 +6,9 @@ using System.Web;
 
 namespace TicketRewardSystem.Models
 {
-    public class Rule
+    public class AchievementRule
     {
-        public int RuleId { get; set; }
+        public int AchievementRuleId { get; set; }
 
         [Required]
         [StringLength(100)]
