@@ -13,47 +13,44 @@ namespace TicketRewardSystem.Controllers
 {
     public class HomeController : Controller
     {
+        private UowData db;
+
+        public HomeController()
+        {
+            this.db = db = new UowData();
+        }
+
         public ActionResult Index()
         {
-            var db = new UowData();
-
+            this.db = new UowData();
+            
             var tickets = db.Tickets.All();
 
             return View(tickets);
         }
 
-        public JsonResult TicketsRead([DataSourceRequest]DataSourceRequest request)
+        [HttpPost]
+        public ActionResult ReadTickets([DataSourceRequest]DataSourceRequest request)
         {
-            var db = new UowData();
+            var tickets = db.Tickets.All().Select(TicketViewModel.FromTicket);
+            var result = tickets.ToDataSourceResult(request);
 
-            var tickets = db.Tickets.All();
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
 
-            DataSourceResult result = tickets.ToDataSourceResult(request, ticket => new TicketViewModel
+        public ActionResult Details(int id)
+        {
+            var ticket = this.db.Tickets.GetById(id);
+            var ticketView = new TicketViewModel
             {
                 TicketId = ticket.TicketId,
                 Title = ticket.Title,
                 Description = ticket.Description,
                 PostedOn = ticket.PostedOn,
                 PostedBy = ticket.PostedBy.UserName
-            });
+            };
 
-            var jsonified = Json(result, JsonRequestBehavior.AllowGet);
-
-            return jsonified;
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            return View(ticketView);
         }
     }
 }

@@ -1,12 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
+using TicketRewardSystem.Models;
 
 namespace TicketRewardSystem.ViewModels
 {
     public class TicketViewModel
     {
+        public static Expression<Func<Ticket, TicketViewModel>> FromTicket
+        {
+            get
+            {
+                return ticket => new TicketViewModel
+                {
+                    TicketId = ticket.TicketId,
+                    Title = ticket.Title,
+                    Description = ticket.Description,
+                    PostedOn = ticket.PostedOn,
+                    PostedBy = ticket.PostedBy.UserName
+                };
+            }
+        }
         public int TicketId { get; set; }
 
         public string Title { get; set; }
