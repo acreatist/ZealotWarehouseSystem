@@ -23,8 +23,8 @@ namespace TicketRewardSystem.Controllers
         public ActionResult Index()
         {
             this.db = new UowData();
-            
-            var tickets = db.Tickets.All();
+
+            var tickets = db.Tickets.All().Select(TicketViewModel.FromTicket);
 
             return View(tickets);
         }
