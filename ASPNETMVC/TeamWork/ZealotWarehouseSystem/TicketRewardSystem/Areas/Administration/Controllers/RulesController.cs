@@ -7,17 +7,18 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using TicketRewardSystem.Models;
+using TicketRewardSystem.Repository;
 
 namespace TicketRewardSystem.Areas.Administration.Controllers
 {
-    public class RulesController : Controller
+    public class RulesController : AdminBaseController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private UowData db = new UowData();
 
         // GET: /Administration/Rules/
         public ActionResult Index()
         {
-            return View(db.Rules.ToList());
+            return View(db.Rules.All().ToList());
         }
 
         // GET: /Administration/Rules/Details/5
@@ -27,7 +28,7 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AchievementRule achievementrule = db.Rules.Find(id);
+            AchievementRule achievementrule = db.Rules.GetById((int)id);
             if (achievementrule == null)
             {
                 return HttpNotFound();
@@ -67,7 +68,7 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AchievementRule achievementrule = db.Rules.Find(id);
+            AchievementRule achievementrule = db.Rules.GetById((int)id);
             if (achievementrule == null)
             {
                 return HttpNotFound();
@@ -86,7 +87,7 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(achievementrule).State = EntityState.Modified;
+                db.Rules.Update(achievementrule);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -100,7 +101,7 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
             {
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AchievementRule achievementrule = db.Rules.Find(id);
+            AchievementRule achievementrule = db.Rules.GetById((int)id);
             if (achievementrule == null)
             {
                 return HttpNotFound();
@@ -113,8 +114,8 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            AchievementRule achievementrule = db.Rules.Find(id);
-            db.Rules.Remove(achievementrule);
+            AchievementRule achievementrule = db.Rules.GetById((int)id);
+            db.Rules.Delete(achievementrule);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

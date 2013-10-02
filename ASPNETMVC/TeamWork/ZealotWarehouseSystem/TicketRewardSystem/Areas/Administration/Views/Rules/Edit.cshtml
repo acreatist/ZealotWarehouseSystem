@@ -2,6 +2,9 @@
 
 @{
     ViewBag.Title = "Edit";
+    var enums = Enum.GetValues(typeof(TicketRewardSystem.Models.PriorityEnum))
+                        .Cast<TicketRewardSystem.Models.PriorityEnum>()
+                        .Select(e => new SelectListItem { Value = ((int)e).ToString(), Text = e.ToString() });
 }
 
 <h2>Edit</h2>
@@ -35,7 +38,7 @@
         <div class="control-group">
             @Html.LabelFor(model => model.Priority, new { @class = "control-label" })
             <div class="controls">
-                @Html.EditorFor(model => model.Priority)
+                @Html.DropDownListFor(model => model.Priority, enums)
                 @Html.ValidationMessageFor(model => model.Priority, null, new { @class = "help-inline" })
             </div>
         </div>
