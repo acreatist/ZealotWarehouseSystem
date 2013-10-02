@@ -1,18 +1,53 @@
 ﻿@{
-    ViewBag.Title = "Home Page";  
+    ViewBag.Title = "Home Page";
 }
 @model IEnumerable<TicketRewardSystem.Models.Ticket>
-<div class="hero-unit">
-    <h1>Ticket reward system</h1>
-    <p class="lead">Another change</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
-</div>
+
 <div class="row">
-    @foreach (var ticket in Model)
-    {
-        <ul>
-            <li>@ticket.Title</li>
-            <li>@ticket.Description</li>
-        </ul>
-    }
+    @*@(Html.Kendo().Grid<TicketRewardSystem.ViewModels.TicketViewModel>()
+        .Name("Tickets")
+        .DataSource(dataSource => dataSource // Configure the grid data source
+            .Ajax() // Specify that ajax binding is used
+            .Read(read => read.Action("TicketsRead", "Home")) // Set the action method which will return the data in JSON format
+        )
+        .Columns(columns =>
+            {
+                columns.Bound(ticket => ticket.TicketId);
+                columns.Bound(ticket => ticket.Title);
+                columns.Bound(ticket => ticket.PostedOn);
+                columns.Bound(ticket => ticket.PostedBy);
+            })
+    )*@
+
+    @(Html.Kendo().Grid(Model)
+        .Name("Tickets")
+        .DataSource(dataSource => dataSource // Configure the grid data source
+            .Server()
+            .Model(model => model.Id(ticket => ticket.TicketId))
+        )
+        .Columns(columns =>
+            {
+                columns.Template(@<text>@Html.ActionLink(item.TicketId.ToString(), "Details", new { id = item.TicketId })</text>).Title("Id");
+                columns.Template(@<text>@Html.ActionLink(item.Title, "Details", new { id = item.TicketId })</text>).Title("Title");
+                columns.Bound(ticket => ticket.PostedOn);
+                columns.Bound(ticket => ticket.PostedBy.UserName);
+            })
+        .DetailTemplate(@<text>
+            <div><stong>Description</stong>: @item.Description</div>
+        </text>)
+   )
 </div>
+
+<script id="client-template" type="text/x-kendo-template">
+    <div>Description: #: Description#</div>
+</script>
+
+<script type="text/javascript">
+    function rowClick() {
+
+        console.log("aaa");
+        var propId = this.select().closest("tr").find("td:eq(0)").text();
+
+        location.href = kendo.format('@(Server.UrlDecode(Url.Action("Details", "Home", new { id = "{0}" })))', propId);
+    }
+</script>
