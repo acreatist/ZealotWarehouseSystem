@@ -1,22 +1,27 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
-@model IEnumerable<TicketRewardSystem.Models.Ticket>
+@model IEnumerable<TicketRewardSystem.ViewModels.TicketViewModel>
 
 <div class="row">
     @*@(Html.Kendo().Grid<TicketRewardSystem.ViewModels.TicketViewModel>()
         .Name("Tickets")
-        .DataSource(dataSource => dataSource // Configure the grid data source
-            .Ajax() // Specify that ajax binding is used
-            .Read(read => read.Action("TicketsRead", "Home")) // Set the action method which will return the data in JSON format
+        .DataSource(data => data
+            .Ajax()
+            .PageSize(10)
+            .ServerOperation(true)
+            .Read(read => read.Action("ReadTickets", "Home"))
+            .Model(model => model.Id(ticket => ticket.TicketId))
         )
+        .Sortable()
+        .Pageable()
         .Columns(columns =>
             {
-                columns.Bound(ticket => ticket.TicketId);
-                columns.Bound(ticket => ticket.Title);
+                columns.Bound(ticket => ticket.Title).ClientTemplate("<a href='" + Url.Action("Edit", "Home") + ">#= Title#</a>");
                 columns.Bound(ticket => ticket.PostedOn);
                 columns.Bound(ticket => ticket.PostedBy);
             })
+        .ClientDetailTemplateId("client-template")
     )*@
 
     @(Html.Kendo().Grid(Model)
@@ -25,15 +30,36 @@
             .Server()
             .Model(model => model.Id(ticket => ticket.TicketId))
         )
+        .Sortable()
+        .Pageable()
         .Columns(columns =>
-            {
-                columns.Template(@<text>@Html.ActionLink(item.TicketId.ToString(), "Details", new { id = item.TicketId })</text>).Title("Id");
-                columns.Template(@<text>@Html.ActionLink(item.Title, "Details", new { id = item.TicketId })</text>).Title("Title");
+            {   
+                columns.Bound(ticket => ticket.Title).Template(@<text>@Html.ActionLink(item.Title, "Details", new { id = item.TicketId })</text>).Title("Title");
                 columns.Bound(ticket => ticket.PostedOn);
-                columns.Bound(ticket => ticket.PostedBy.UserName);
+                columns.Bound(ticket => ticket.PostedBy);
+                columns.Bound(ticket => ticket.Status).Template(@<text>
+                    @{
+                        var badgeClass = "badge";
+                        switch (item.Status)
+                        {
+                            case TicketRewardSystem.Models.StatusEnum.Open:
+                                badgeClass += " badge-success";
+                                break;
+                            case TicketRewardSystem.Models.StatusEnum.InProgress:
+                                badgeClass += " badge-warning";
+                                break;
+                            case TicketRewardSystem.Models.StatusEnum.Resolved:
+                                badgeClass += " badge-info";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    @Html.Label(item.Status.ToString(), new { @class = badgeClass })
+                </text>);
             })
         .DetailTemplate(@<text>
-            <div><stong>Description</stong>: @item.Description</div>
+            <div><strong>Description</strong>: @item.Description</div>
         </text>)
    )
 </div>
