@@ -73,6 +73,7 @@
 
         var grid = $("#Tickets").data("kendoGrid");
         var ds = new kendo.data.DataSource({
+            pageSize: 10,
             transport: {
                 read: {
                     url: action,
@@ -96,6 +97,11 @@
 
         ds.fetch(function () {
             grid.setDataSource(ds);
+            grid.pageable({
+                refresh: true,
+                pageSizes: true
+            });
+
             grid.dataSource.read();
         });
     });
