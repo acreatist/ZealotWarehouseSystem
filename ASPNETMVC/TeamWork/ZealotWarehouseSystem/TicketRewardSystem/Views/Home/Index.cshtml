@@ -30,6 +30,7 @@
         )
         .Sortable()
         .Pageable()
+        .Resizable(resize => resize.Columns(true))
         .Columns(columns =>
             {
                 columns.Bound(ticket => ticket.Title).ClientTemplate("<a href='/Home/Details/#: TicketId#'>#:Title#</a>");
@@ -87,7 +88,7 @@
                 data: function (data) {
                     $.each(data.Data, function (idx, elem) {
                         if (elem.PostedOn) {
-                            elem.PostedOn = kendo.parseDate(elem.PostedOn, "yyyy-MM-dd");
+                            elem.PostedOn = kendo.parseDate(elem.PostedOn, "yyyy/MM/dd");
                         }
                     });
 
