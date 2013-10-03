@@ -13,6 +13,7 @@ namespace TicketRewardSystem.Models
 
         [Required]
         [StringLength(100)]
+        [AllowHtml]
         public string Title { get; set; }
 
         [Required]
