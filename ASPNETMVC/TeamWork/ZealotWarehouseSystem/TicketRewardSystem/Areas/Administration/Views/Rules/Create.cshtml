@@ -1,4 +1,4 @@
-﻿@model TicketRewardSystem.Models.AchievementRule
+﻿@model TicketRewardSystem.ViewModels.RuleViewModel
 
 @{
     ViewBag.Title = "Create";
@@ -54,7 +54,7 @@
         </div>
 
         <div class="control-group">
-            @Html.HiddenFor(model => model.Achievement.AchievementId, new { @Value = "0" })
+            @Html.HiddenFor(model => model.Achievement, new { @Value = "0" })
                 <div class="controls">
                     @(Html.Kendo().DropDownList()
                             .Name("achievementList")
@@ -89,7 +89,7 @@
 <script type="text/javascript">
     function selectedValue(e) {
         var selValue = this.dataItem(e.item.index()).AchievementId;
-        $('#Achievement_AchievementId').val(selValue);
+        $('#Achievement').val(selValue);
     }
 </script>
 @section Scripts {
