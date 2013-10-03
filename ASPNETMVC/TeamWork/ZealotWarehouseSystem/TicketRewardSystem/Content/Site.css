@@ -33,3 +33,7 @@ input[type="checkbox"].input-validation-error {
   background-color: white;
   border-style:none;
 }
+
+a.btn.pull-right {
+    margin-left: 10px;
+}

@@ -4,64 +4,46 @@
 @model IEnumerable<TicketRewardSystem.ViewModels.TicketViewModel>
 
 <div class="row">
-    @*@(Html.Kendo().Grid<TicketRewardSystem.ViewModels.TicketViewModel>()
+    <div class="clearfix">
+        <ul class="nav nav-tabs pull-left">
+            <li class="active">
+                <a href="/Home/ReadAllTickets" data-role="refresh-grid">All Issues</a>
+            </li>
+            <li><a href="/Home/ReadOpenTickets" data-role="refresh-grid">Open</a></li>
+            <li><a href="/Home/ReadInProgressTickets" data-role="refresh-grid">In Progress</a></li>
+            <li><a href="/Home/ReadClosedTickets" data-role="refresh-grid">Closed</a></li>
+        </ul>
+
+        @Html.ActionLink("Submit Issue", "Create", "Home", new { @class = "btn btn-primary pull-right" })
+        <a href="/Home/ReadMyTickets" class="btn pull-right" data-role="refresh-grid">My Tickets</a>
+        
+    </div>
+
+    <div class="well well-small">
+        @(Html.Kendo().Grid<TicketRewardSystem.ViewModels.TicketViewModel>()
         .Name("Tickets")
         .DataSource(data => data
             .Ajax()
             .PageSize(10)
             .ServerOperation(true)
-            .Read(read => read.Action("ReadTickets", "Home"))
-            .Model(model => model.Id(ticket => ticket.TicketId))
+            .Read(read => read.Action("ReadAllTickets", "Home"))
         )
         .Sortable()
         .Pageable()
         .Columns(columns =>
             {
-                columns.Bound(ticket => ticket.Title).ClientTemplate("<a href='" + Url.Action("Edit", "Home") + ">#= Title#</a>");
+                columns.Bound(ticket => ticket.Title).ClientTemplate("<a href='/Home/Details/#: TicketId#'>#:Title#</a>");
                 columns.Bound(ticket => ticket.PostedOn);
                 columns.Bound(ticket => ticket.PostedBy);
+                columns.Bound(ticket => ticket.Status);
             })
         .ClientDetailTemplateId("client-template")
-    )*@
-
-    @(Html.Kendo().Grid(Model)
-        .Name("Tickets")
-        .DataSource(dataSource => dataSource // Configure the grid data source
-            .Server()
-            .Model(model => model.Id(ticket => ticket.TicketId))
         )
-        .Sortable()
-        .Pageable()
-        .Columns(columns =>
-            {   
-                columns.Bound(ticket => ticket.Title).Template(@<text>@Html.ActionLink(item.Title, "Details", new { id = item.TicketId })</text>).Title("Title");
-                columns.Bound(ticket => ticket.PostedOn);
-                columns.Bound(ticket => ticket.PostedBy);
-                columns.Bound(ticket => ticket.Status).Template(@<text>
-                    @{
-                        var badgeClass = "badge";
-                        switch (item.Status)
-                        {
-                            case TicketRewardSystem.Models.StatusEnum.Open:
-                                badgeClass += " badge-success";
-                                break;
-                            case TicketRewardSystem.Models.StatusEnum.InProgress:
-                                badgeClass += " badge-warning";
-                                break;
-                            case TicketRewardSystem.Models.StatusEnum.Resolved:
-                                badgeClass += " badge-info";
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    @Html.Label(item.Status.ToString(), new { @class = badgeClass })
-                </text>);
-            })
-        .DetailTemplate(@<text>
-            <div><strong>Description</strong>: @item.Description</div>
-        </text>)
-   )
+    </div>
+
+    <p>
+        @Html.ActionLink("Submit Issue", "Create", "Home", new { @class = "btn btn-primary pull-right" })
+    </p>
 </div>
 
 <script id="client-template" type="text/x-kendo-template">
@@ -76,4 +58,47 @@
 
         location.href = kendo.format('@(Server.UrlDecode(Url.Action("Details", "Home", new { id = "{0}" })))', propId);
     }
+
+    function deactivateNavItems() {
+        $("ul.nav-tabs li").each(function () {
+            $(this).removeClass("active");
+        });
+    }
+
+    $('a[data-role="refresh-grid"]').click(function (ev) {
+        ev.preventDefault();
+
+        deactivateNavItems();
+        $(this).parent().addClass("active");
+
+        var action = $(this).attr("href");
+
+        var grid = $("#Tickets").data("kendoGrid");
+        var ds = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: action,
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8"
+                }
+            },
+            schema: { // Describe the result format
+                data: function (data) {
+                    $.each(data.Data, function (idx, elem) {
+                        if (elem.PostedOn) {
+                            elem.PostedOn = kendo.parseDate(elem.PostedOn, "yyyy-MM-dd");
+                        }
+                    });
+
+                    return data.Data;
+                }
+            }
+        });
+
+        ds.fetch(function () {
+            grid.setDataSource(ds);
+            grid.dataSource.read();
+        });
+    });
 </script>
