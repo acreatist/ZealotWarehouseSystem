@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Web.Mvc;
 using TicketRewardSystem.Models;
 
 namespace TicketRewardSystem.ViewModels
@@ -15,7 +16,7 @@ namespace TicketRewardSystem.ViewModels
             get
             {
                 return ticket => new TicketViewModel
-                {
+                {   
                     TicketId = ticket.TicketId,
                     Title = ticket.Title,
                     Description = ticket.Description,
@@ -29,6 +30,7 @@ namespace TicketRewardSystem.ViewModels
 
         public string Title { get; set; }
 
+        [AllowHtml]
         public string Description { get; set; }
 
         
