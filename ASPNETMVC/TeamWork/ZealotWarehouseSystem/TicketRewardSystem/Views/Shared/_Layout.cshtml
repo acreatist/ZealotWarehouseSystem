@@ -23,6 +23,7 @@
                 @Html.ActionLink("TicketReward System", "Index", "Home", new { area = "" }, new { @class = "brand" })
                 <div class="nav-collapse collapse">
                     <ul class="nav">
+                        <li>@Html.ActionLink("Tickets", "Tickets", "Home", new { area = "" }, null)</li>
                         @if (User.IsInRole("admin"))
                         {
                            <li>@Html.ActionLink("Rules", "Index", "Rules", new { area = "Administration" }, null)</li>

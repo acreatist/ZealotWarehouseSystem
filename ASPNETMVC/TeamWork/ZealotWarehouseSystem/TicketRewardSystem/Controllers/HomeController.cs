@@ -22,6 +22,11 @@ namespace TicketRewardSystem.Controllers
 
         public ActionResult Index()
         {
+            return View();
+        }
+        
+        public ActionResult Tickets()
+        {
             var tickets = db.Tickets.All().Select(TicketViewModel.FromTicket);
 
             return View(tickets);
@@ -115,7 +120,7 @@ namespace TicketRewardSystem.Controllers
                 ticket.Status = StatusEnum.Open;
                 ticket.PostedBy = currUser;
                 ticket.Description = HttpUtility.HtmlDecode(ticket.Description);
-
+                
                 db.Tickets.Add(ticket);
                 db.SaveChanges();
                 return RedirectToAction("Index");
