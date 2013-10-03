@@ -25,12 +25,12 @@ namespace TicketRewardSystem.Areas.Support.Controllers
             return View();
         }
 
-        public JsonResult ReadTickets([DataSourceRequest]DataSourceRequest request)
-        {
-            var tickets = this.Data.Tickets.All().Select(TicketAdminViewModel.FromTicket);
+        //public JsonResult ReadMyTickets([DataSourceRequest]DataSourceRequest request)
+        //{
+        //    var tickets = this.Data.Tickets.All().Select(TicketAdminViewModel.FromTicket);
 
-            DataSourceResult result = tickets.ToDataSourceResult(request);
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
+        //    DataSourceResult result = tickets.ToDataSourceResult(request);
+        //    return Json(result, JsonRequestBehavior.AllowGet);
+        //}
 	}
 }
