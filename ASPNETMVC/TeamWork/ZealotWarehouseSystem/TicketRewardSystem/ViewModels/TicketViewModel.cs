@@ -33,7 +33,8 @@ namespace TicketRewardSystem.ViewModels
         [AllowHtml]
         public string Description { get; set; }
 
-        
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy H:mm}")]
         public DateTime PostedOn { get; set; }
 
 
