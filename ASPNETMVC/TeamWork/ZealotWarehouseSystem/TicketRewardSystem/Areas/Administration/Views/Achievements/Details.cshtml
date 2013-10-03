@@ -26,11 +26,25 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ImageUrl)
+            <span>Image logo</span>
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ImageUrl)
+            <div class="achievement-logo">
+                <img src="@Url.Content(Model.ImageUrl)" alt="Image" width="300px" height="55px" />
+            </div>
+        </dd>
+
+        <dt>
+            <a id="btn-showOwners">Show owners</a>
+        </dt>
+        <dd>
+            <div id="allOwners">
+                @foreach (var user in Model.Owners)
+                {
+                    <p> @user.UserName </p>
+                }
+            </div>
         </dd>
 
     </dl>
