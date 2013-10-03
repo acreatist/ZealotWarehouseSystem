@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace TicketRewardSystem.Models
 {
@@ -15,6 +16,8 @@ namespace TicketRewardSystem.Models
         public string Title { get; set; }
 
         [Required]
+        [AllowHtml]
+        [DataType(DataType.Html)]
         public string Description { get; set; }
                 
         public DateTime PostedOn { get; set; }
