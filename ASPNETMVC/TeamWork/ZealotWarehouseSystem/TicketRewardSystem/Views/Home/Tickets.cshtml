@@ -6,17 +6,17 @@
     <div class="clearfix">
         <ul class="nav nav-tabs pull-left">
             <li class="active">
-                <a href="/Home/ReadAllTickets" data-role="refresh-grid">All Issues</a>
+                <a href="#" data-role="refresh-grid" data-filter="none">All Issues</a>
             </li>
-            <li><a href="/Home/ReadOpenTickets" data-role="refresh-grid">Open</a></li>
-            <li><a href="/Home/ReadInProgressTickets" data-role="refresh-grid">In Progress</a></li>
-            <li><a href="/Home/ReadClosedTickets" data-role="refresh-grid">Closed</a></li>
+            <li><a href="#" data-role="refresh-grid" data-filter="0">Open</a></li>
+            <li><a href="#" data-role="refresh-grid" data-filter="1">In Progress</a></li>
+            <li><a href="#" data-role="refresh-grid" data-filter="2">Closed</a></li>
         </ul>
         
         @if (User.Identity.IsAuthenticated)
         {
             @Html.ActionLink("Submit Issue", "Create", "Home", new { @class = "btn btn-primary pull-right" })
-            <a href="/Home/ReadMyTickets" class="btn pull-right" data-role="refresh-grid">My Tickets</a>        
+             <a href="#" class="btn pull-right" data-role="refresh-grid" data-filter="myTickets">My Tickets</a>
         }
 
     </div>
@@ -70,39 +70,21 @@
         deactivateNavItems();
         $(this).parent().addClass("active");
 
-        var action = $(this).attr("href");
-
         var grid = $("#Tickets").data("kendoGrid");
-        var ds = new kendo.data.DataSource({
-            pageSize: 10,
-            transport: {
-                read: {
-                    url: action,
-                    type: "GET",
-                    dataType: "json",
-                    contentType: "application/json; charset=utf-8"
-                }
-            },
-            schema: { // Describe the result format
-                data: function (data) {
-                    $.each(data.Data, function (idx, elem) {
-                        if (elem.PostedOn) {
-                            elem.PostedOn = kendo.parseDate(elem.PostedOn, "yyyy/MM/dd");
-                        }
-                    });
 
-                    return data.Data;
-                }
-            }
-        });
+        var action = $(this).attr("data-filter");
+        if (action == "none") {
+            grid.dataSource.filter({});
+            
+        } else if (action == "myTickets") {
+            var currUserName = "@User.Identity.Name";
+            grid.dataSource.filter({ field: 'PostedBy', operator: 'eq', value: currUserName });
+        } else {
+            action = Number(action);
+            grid.dataSource.filter({ field: 'Status', operator: 'eq', value: action });
+        }
 
-        ds.fetch(function () {
-            grid.setDataSource(ds);
-            grid.pageable({
-                refresh: true,
-                pageSizes: true
-            });
-
+        grid.dataSource.fetch(function () {
             grid.dataSource.read();
         });
     });

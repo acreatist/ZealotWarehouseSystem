@@ -22,6 +22,7 @@ namespace TicketRewardSystem.ViewModels
                     Description = ticket.Description,
                     PostedOn = ticket.PostedOn,
                     PostedBy = ticket.PostedBy.UserName,
+                    AssignedTo = ticket.AssignedTo.UserName,
                     Status = ticket.Status
                 };
             }
@@ -43,5 +44,8 @@ namespace TicketRewardSystem.ViewModels
         public string Priority { get; set; }
 
         public StatusEnum Status { get; set; }
+
+        // TODO: on support controller, we'll have to choose if we'll use home/readAlltickets action from home, as we need the assignedTo field, but don't need it in home..
+        public string AssignedTo { get; set; }
     }
 }

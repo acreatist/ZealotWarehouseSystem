@@ -62,6 +62,7 @@ namespace TicketRewardSystem.Controllers
         public ActionResult ReadInProgressTickets([DataSourceRequest]DataSourceRequest request)
         {
             var ticketsOpen = db.Tickets.All().Where(t => t.Status == StatusEnum.InProgress).Select(TicketViewModel.FromTicket);
+
             var result = ticketsOpen.ToDataSourceResult(request);
 
             return Json(result, JsonRequestBehavior.AllowGet);
