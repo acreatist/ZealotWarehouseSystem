@@ -9,39 +9,30 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Text)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </th>
-        <th></th>
-    </tr>
+<div class="container">
+    @(Html.Kendo().Grid(Model).Name("rules")
+                        .DataSource(dataSource => dataSource // Configure the grid data source
+                           .Server()
+                            .Model(model => model.Id(ach => ach.AchievementId))
+                           .PageSize(10)
+                        )
+                        .Columns(columns =>
+                            {
+                                columns.Bound(col => col.AchievementId).Title("Achievement");
+                                columns.Bound(col => col.Title);
+                                columns.Bound(col => col.Text);
+                                columns.Template(@<div class="achievement-logo">
+                                                      <img src="@Url.Content(item.ImageUrl)" alt="Image" width="300px" height="55px" />
+                                                 </div>);
+                                columns.Template(@<text>@Html.ActionLink("Edit", "Edit", new { id = item.AchievementId })</text>);
+                                columns.Template(@<text>@Html.ActionLink("Details", "Details", new { id = item.AchievementId })</text>);
+                                columns.Template(@<text>@Html.ActionLink("Delete", "Delete", new { id = item.AchievementId })</text>);
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Text)
-        </td>
-        <td>
-            <div class="achievement-logo">
-                <img src="@Url.Content(item.ImageUrl)" alt="Image" width="300px" height="55px" />
-            </div>
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.AchievementId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.AchievementId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.AchievementId })
-        </td>
-    </tr>
-}
-
-</table>
+                            })
+                        .Pageable()
+                        .Sortable()
+    )
+</div>  
+@*<div class="achievement-logo">
+    <img src="@Url.Content(item.ImageUrl)" alt="Image" width="300px" height="55px" />
+</div>*@
