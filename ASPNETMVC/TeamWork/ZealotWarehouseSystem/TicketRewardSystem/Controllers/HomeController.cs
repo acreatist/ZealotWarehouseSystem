@@ -123,7 +123,7 @@ namespace TicketRewardSystem.Controllers
                 
                 db.Tickets.Add(ticket);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Tickets");
             }
 
             return View(ticket);
