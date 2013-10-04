@@ -56,12 +56,15 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
             return Json((new[] { ticket }.ToDataSourceResult(request, ModelState)), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult DeleteBook([DataSourceRequest] DataSourceRequest request, TicketAdminViewModel ticket)
+        public JsonResult DeleteTicket([DataSourceRequest] DataSourceRequest request, TicketAdminViewModel ticket)
         {
-            //var existingBook = this.Data.Tickets.FirstOrDefault(x => x.Id == book.Id);
+            var existingTicket = this.Data.Tickets.GetById(ticket.Id);
 
-            //this.Data.Books.Remove(existingBook);
-            //this.Data.SaveChanges();
+            if (existingTicket != null)
+            {
+                this.Data.Tickets.Delete(existingTicket.TicketId);
+                this.Data.SaveChanges();
+            }
 
             return Json(new[] { ticket }, JsonRequestBehavior.AllowGet);
         }
