@@ -23,11 +23,20 @@
                 @Html.ActionLink("TicketReward System", "Index", "Home", new { area = "" }, new { @class = "brand" })
                 <div class="nav-collapse collapse">
                     <ul class="nav">
-                        <li>@Html.ActionLink("Tickets", "Tickets", "Home", new { area = "" }, null)</li>
+                        
                         @if (User.IsInRole("admin"))
                         {
+                           <li>@Html.ActionLink("Tickets", "Index", "TicketsAdmin", new { area = "Administration" }, null)</li>
                            <li>@Html.ActionLink("Rules", "Index", "Rules", new { area = "Administration" }, null)</li>
                            <li>@Html.ActionLink("Achievements", "Index", "Achievements", new { area = "Administration" }, null)</li>
+                        }
+                        else if (User.IsInRole("support"))
+                        {
+                           <li>@Html.ActionLink("Tickets", "Index", "TicketSupport", new { area = "Support" }, null)</li>
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink("Tickets", "Tickets", "Home", new { area = "" }, null)</li>
                         }
                     </ul>
                     @Html.Partial("_LoginPartial")
