@@ -40,54 +40,6 @@ namespace TicketRewardSystem.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpGet]
-        public ActionResult ReadAllTickets([DataSourceRequest]DataSourceRequest request)
-        {
-            var tickets = db.Tickets.All().Select(TicketViewModel.FromTicket);
-            var result = tickets.ToDataSourceResult(request);
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
-        public ActionResult ReadOpenTickets([DataSourceRequest]DataSourceRequest request)
-        {
-            var ticketsOpen = db.Tickets.All().Where(t => t.Status == StatusEnum.Open).Select(TicketViewModel.FromTicket);
-            var result = ticketsOpen.ToDataSourceResult(request);
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
-        public ActionResult ReadInProgressTickets([DataSourceRequest]DataSourceRequest request)
-        {
-            var ticketsOpen = db.Tickets.All().Where(t => t.Status == StatusEnum.InProgress).Select(TicketViewModel.FromTicket);
-
-            var result = ticketsOpen.ToDataSourceResult(request);
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
-        public ActionResult ReadClosedTickets([DataSourceRequest]DataSourceRequest request)
-        {
-            var ticketsOpen = db.Tickets.All().Where(t => t.Status == StatusEnum.Resolved).Select(TicketViewModel.FromTicket);
-            var result = ticketsOpen.ToDataSourceResult(request);
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
-        public ActionResult ReadMyTickets([DataSourceRequest]DataSourceRequest request)
-        {
-            var currUser = db.Users.All().FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-            var ticketsOpen = db.Tickets.All().Where(t => t.PostedBy.Id == currUser.Id).Select(TicketViewModel.FromTicket);
-            var result = ticketsOpen.ToDataSourceResult(request);
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
         public ActionResult Details(int id)
         {
             var ticket = this.db.Tickets.GetById(id);
