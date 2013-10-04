@@ -11,7 +11,7 @@ namespace TicketRewardSystem.Models
         public int AchievementId { get; set; }
 
         [Required]
-        [StringLength(100)]
+        [StringLength(100)]        
         public string Title { get; set; }
 
         [Required]
