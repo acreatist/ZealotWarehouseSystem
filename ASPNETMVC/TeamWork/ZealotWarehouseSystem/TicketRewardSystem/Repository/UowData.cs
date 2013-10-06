@@ -1,8 +1,8 @@
 ﻿namespace TicketRewardSystem.Repository
 {
+    using Microsoft.AspNet.Identity.EntityFramework;
     using System;
     using System.Collections.Generic;
-
     using TicketRewardSystem.Models;
 
     public class UowData : IUowData
@@ -51,6 +51,14 @@
             get
             {
                 return this.GetRepository<ApplicationUser>();
+            }
+        }
+
+        public IRepository<Role> Roles
+        {
+            get
+            {
+                return this.GetRepository<Role>();
             }
         }
 
