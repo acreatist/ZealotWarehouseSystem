@@ -41,17 +41,33 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
 
             //var xa = ModelState.Keys["PostedOn"];
 
+            if (ModelState.ContainsKey("PostedOn"))
+                ModelState["PostedOn"].Errors.Clear();
+
+
             if (ticket != null && ModelState.IsValid)
             {
+                var xah = this.Data.Users.All().FirstOrDefault(x => x.UserName == ticket.PostedBy);
                 existingTicket.Title = ticket.Title;
                 existingTicket.Description = ticket.Description;
                 existingTicket.PostedBy = this.Data.Users.All().FirstOrDefault(x => x.UserName == ticket.PostedBy);
-                existingTicket.PostedOn = ticket.PostedOn;
-                existingTicket.ResolvedOn = ticket.ResolvedOn;
-                existingTicket.AssignedTo = this.Data.Users.All().FirstOrDefault(x => x.UserName == ticket.AssignedTo);
-
-
+                existingTicket.Status = ticket.Status;
+                existingTicket.Priority = ticket.Priority;
+                ticket.ResolvedOn = existingTicket.ResolvedOn;
+                ticket.PostedOn = existingTicket.PostedOn;
+                
+                if (ticket.AssignedTo != null)
+                {
+                    existingTicket.AssignedTo = this.Data.Users.All().FirstOrDefault(x => x.UserName == ticket.AssignedTo);
+                }
+                else
+                {
+                    existingTicket.AssignedTo = null;
+                }
+                this.Data.SaveChanges();
             }
+
+           
 
             return Json((new[] { ticket }.ToDataSourceResult(request, ModelState)), JsonRequestBehavior.AllowGet);
         }

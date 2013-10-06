@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using TicketRewardSystem.Areas.Administration.ViewModels;
 using TicketRewardSystem.Repository;
+using TicketRewardSystem.Models;
 
 namespace TicketRewardSystem.Areas.Support.Controllers
 {
@@ -32,5 +33,23 @@ namespace TicketRewardSystem.Areas.Support.Controllers
         //    DataSourceResult result = tickets.ToDataSourceResult(request);
         //    return Json(result, JsonRequestBehavior.AllowGet);
         //}
+
+        public ActionResult ReadAllTickets([DataSourceRequest]DataSourceRequest request, string a)
+        {
+            var tickets = Data.Tickets.All().Select(TicketAdminViewModel.FromTicket);
+            var result = tickets.ToDataSourceResult(request);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult ReadAllTickets([DataSourceRequest]DataSourceRequest request)
+        {
+            var tickets = Data.Tickets.All().Select(TicketAdminViewModel.FromTicket);
+            var result = tickets.ToDataSourceResult(request);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
 	}
 }

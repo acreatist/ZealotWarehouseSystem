@@ -26,14 +26,14 @@
             .Ajax()
             .PageSize(10)
             .ServerOperation(true)
-            .Read(read => read.Action("ReadAllTickets","Home", new { area = ""}))
+            .Read(read => read.Action("ReadAllTickets","TicketSupport", new { area = "Support"}))
         )
         .Sortable()
         .Pageable()
         .Resizable(resize => resize.Columns(true))
         .Columns(columns =>
             {
-                columns.Bound(ticket => ticket.Title).ClientTemplate("<a href='/Home/Details/#: TicketId#'>#:Title#</a>");
+                columns.Bound(ticket => ticket.Title).ClientTemplate("<a href='/Home/Details/#: Id#'>#:Title#</a>");
                 columns.Bound(ticket => ticket.PostedOn);
                 columns.Bound(ticket => ticket.PostedBy);
                 columns.Bound(ticket => ticket.AssignedTo);
