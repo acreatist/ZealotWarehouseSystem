@@ -39,7 +39,8 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
 
         // GET: /Administration/Rules/Create
         public ActionResult Create()
-        {           
+        {
+            var achievements = this.db.Achievements.All();
             return View();
         }
 
@@ -160,7 +161,7 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
                 TimespanDays = achievementrule.TimespanDays,
                 Priority = achievementrule.Priority                
             };
-            model.Achievement = achievementrule.Achievement != null ? achievementrule.Achievement.AchievementId : 0;
+            model.Achievement = achievementrule.Achievement.AchievementId;
             return model;
         }
 

@@ -63,7 +63,6 @@
                             .Name("achievementList")
                             .DataTextField("Title")
                             .DataValueField("AchievementId")
-                            .OptionLabel("--Select Achievement--")
                             .Events(ev => ev.Select("selectedValue"))
                             .DataSource(data =>
                             {
@@ -73,7 +72,7 @@
                                     })
                                 .ServerFiltering(true);
                             })
-                            .SelectedIndex((Model.Achievement))
+                            .SelectedIndex((Model.Achievement - 1))
                         )
                  </div>
         </div>

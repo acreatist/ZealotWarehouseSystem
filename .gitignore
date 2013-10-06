@@ -236,3 +236,4 @@ pip-log.txt
 *.rar
 *.tar
 *.zip
+/ASPNETMVC/TeamWork/ZealotWarehouseSystem/TicketRewardSystem/Areas/Support/Controllers

@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using TicketRewardSystem.Models;
+using TicketRewardSystem.ViewModels;
 using TicketRewardSystem.Repository;
 
 namespace TicketRewardSystem.Areas.Administration.Controllers
@@ -25,7 +26,7 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
 
         public JsonResult GetAll()
         {
-            var allAchievements = db.Achievements.All().ToList();
+            var allAchievements = db.Achievements.All().Select(AchievementViewModel.FromAchievement);
             return Json(allAchievements, JsonRequestBehavior.AllowGet);
         }
 

@@ -20,6 +20,8 @@ namespace TicketRewardSystem.ViewModels
         public PriorityEnum Priority { get; set; }
         
         public int TicketsCount { get; set; }
+
+        [Required]
         public int Achievement { get; set; }
 
         public static Expression<Func<AchievementRule, RuleViewModel>> FromRule

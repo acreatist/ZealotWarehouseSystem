@@ -23,6 +23,7 @@
                 command.Destroy();
                 //command.Custom("Resolve").Click("showResolve");
             });
+        @*columns.Template(@<text></text>).ClientTemplate(Html.ActionLink("Resolve", "ResolveTicket", new { id = "#= Id #" }).ToHtmlString());*@
     })
     .Pageable(page =>
         {
@@ -51,7 +52,7 @@
             .Events(ev => ev.Error("errorAlert"))
             .Read("ReadTickets", "TicketsAdmin")
             .Update("UpdateTicket", "TicketsAdmin")
-            .Destroy("DeleteTicket", "TicketsAdmin");
+            .Destroy("DeleteTicket", "TicketsAdmin");            
     })
     .ClientDetailTemplateId("client-template"))
 
@@ -73,11 +74,7 @@
 <script type="text/x-kendo-template" id="template">
     <div id="details-container">
         <h2>xdsaxdas</h2>
-        <em>xdsaxdas</em>
-        <dl>
-            <dt>dsds</dt>
-            <dt>aaaaa</dt>
-        </dl>
+        
     </div>
 </script>
 

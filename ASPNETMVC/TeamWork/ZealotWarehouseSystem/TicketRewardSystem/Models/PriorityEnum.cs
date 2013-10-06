@@ -9,6 +9,7 @@ namespace TicketRewardSystem.Models
     {
         Low,
         Medium,
-        High
+        High,
+        Default
     }
 }

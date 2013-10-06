@@ -51,5 +51,65 @@ namespace TicketRewardSystem.Areas.Support.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult ResolveTicket(int id)
+        {
+            var ticket = this.Data.Tickets.GetById(id);
+            var officer = ticket.AssignedTo;
+
+            if (officer == null)
+            {
+                return Content("Unassigned tickets cannot be resolved.");
+            }
+
+            ticket.Status = StatusEnum.Resolved;
+            ticket.ResolvedOn = DateTime.Now;
+            this.Data.Tickets.Update(ticket);
+            this.Data.SaveChanges();
+
+            List<Achievement> unlocked = ResolveRulesAndAchievements(officer);
+            if (unlocked.Count != 0)
+            {
+                ViewBag.UnlockedAchievements = unlocked;
+            }
+
+            // TODO: Change redirection
+            return View("Index");
+        }
+
+        private List<Achievement> ResolveRulesAndAchievements(ApplicationUser officer)
+        {
+            var allTickets = this.Data.Tickets.All().Where(t => t.AssignedTo.Id == officer.Id && t.Status == StatusEnum.Resolved).ToList();
+            var allRules = this.Data.Rules.All().Where(r => r.TicketsCount <= allTickets.Count).ToList();
+            var completedAchievements = officer.Achievements.ToList();
+            List<Achievement> newAchievements = new List<Achievement>();
+
+            foreach (var rule in allRules)
+            {
+                if (completedAchievements.Contains(rule.Achievement))
+                {
+                    continue;
+                }
+
+                if (rule.Priority != PriorityEnum.Default)
+                {
+                    var ticketCountWithPriority = allTickets.Where(t => t.Priority == rule.Priority).Count();
+                    if (rule.TicketsCount > ticketCountWithPriority)
+                    {
+                        continue;
+                    }
+                }
+                completedAchievements.Add(rule.Achievement);
+                newAchievements.Add(rule.Achievement);
+            }
+
+            foreach (var ach in newAchievements)
+            {
+                officer.Achievements.Add(ach);
+            }
+            this.Data.SaveChanges();
+
+            return newAchievements;
+        }
+
 	}
 }

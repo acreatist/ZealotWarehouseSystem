@@ -84,5 +84,7 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
 
             return Json(new[] { ticket }, JsonRequestBehavior.AllowGet);
         }
+
+       
     }
 }
