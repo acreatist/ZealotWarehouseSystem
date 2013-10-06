@@ -174,7 +174,10 @@
     <Compile Include="Areas\Administration\Controllers\HomeAdminController.cs" />
     <Compile Include="Areas\Administration\Controllers\RulesController.cs" />
     <Compile Include="Areas\Administration\Controllers\TicketsAdminController.cs" />
+    <Compile Include="Areas\Administration\Controllers\UsersController.cs" />
     <Compile Include="Areas\Administration\ViewModels\TicketAdminViewModel.cs" />
+    <Compile Include="Areas\Administration\ViewModels\UserAdminRoleViewModel.cs" />
+    <Compile Include="Areas\Administration\ViewModels\UsersAdminViewModel.cs" />
     <Compile Include="Areas\Support\Controllers\TicketSupportController.cs" />
     <Compile Include="Areas\Support\SupportAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -276,6 +279,8 @@
     <Content Include="Areas\Support\Views\web.config" />
     <Content Include="Areas\Support\Views\TicketSupport\Index.cshtml" />
     <Content Include="Areas\Support\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Administration\Views\Users\Index.cshtml" />
+    <Content Include="Areas\Administration\Views\Shared\EditorTemplates\EditUsersAdmin.cshtml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
