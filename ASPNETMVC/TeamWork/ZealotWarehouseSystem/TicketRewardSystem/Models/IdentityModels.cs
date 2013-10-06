@@ -13,6 +13,7 @@ namespace TicketRewardSystem.Models
         public ApplicationUser() : base()
         {
             this.Achievements = new HashSet<Achievement>();
+            this.Roles = new HashSet<UserRole>();
         }
     }
 
