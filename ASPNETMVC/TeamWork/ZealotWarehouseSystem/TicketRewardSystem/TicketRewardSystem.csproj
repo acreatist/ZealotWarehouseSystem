@@ -253,8 +253,10 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="img\achievement-10vip.gif" />
+    <Content Include="img\achievement-1vip.gif" />
+    <Content Include="img\achievement-5def.gif" />
+    <Content Include="img\achievement-5med.gif" />
     <Content Include="img\achievement-default.gif" />
-    <Content Include="img\achievement.gif" />
     <Content Include="img\glyphicons-halflings-white.png" />
     <Content Include="img\glyphicons-halflings.png" />
     <Content Include="Scripts\bootstrap.js" />
