@@ -4,7 +4,6 @@
 @model TicketRewardSystem.ViewModels.TicketViewModel
 
 <div id="container-details">
-    @Html.ActionLink("Back to list", "Index")
     <div class="row">
         <section class="span8">
             <h2>@Model.Title</h2>
@@ -43,20 +42,23 @@
                 <dd>@Model.PostedBy</dd>
 
             </dl>
-
-            @if (Model.Status != TicketRewardSystem.Models.StatusEnum.Resolved)
-            {
-                <div id="link-resolve">
-                    @Ajax.ActionLink("Mark as Resolved", "ResolveTicket", new { id = Model.TicketId }, new AjaxOptions()
-                                                                {
-                                                                    HttpMethod = "POST",
-                                                                    InsertionMode = InsertionMode.Replace,
-                                                                    UpdateTargetId = "unlocked",
-                                                                    OnSuccess = "setResolvedStatus"
-                                                                })
-                </div>
-            }
-
+            <dl class="dl-horizontal">
+                <dt>&nbsp;</dt>
+                <dd>
+                    @if (Model.Status == TicketRewardSystem.Models.StatusEnum.InProgress)
+                    {
+                                <div id="link-resolve">
+                                    @Ajax.ActionLink("Mark as Resolved", "ResolveTicket", new { id = Model.TicketId }, new AjaxOptions()
+                                                                    {
+                                                                        HttpMethod = "POST",
+                                                                        InsertionMode = InsertionMode.Replace,
+                                                                        UpdateTargetId = "unlocked",
+                                                                        OnSuccess = "setResolvedStatus"
+                                                                    }, new { @class = "btn btn-success" })
+                                        </div>
+                    }
+                </dd>
+            </dl>
         </aside>
     </div>
     <div id="unlocked"></div>
@@ -73,3 +75,5 @@
         }
     </script>
 }
+
+@Html.ActionLink("Back to list", "Index", null, new { @class = "btn" })
