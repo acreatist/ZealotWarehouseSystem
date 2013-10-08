@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using TicketRewardSystem.Areas.Administration.ViewModels;
 using TicketRewardSystem.Repository;
 using TicketRewardSystem.Models;
+using TicketRewardSystem.ViewModels;
 
 namespace TicketRewardSystem.Areas.Support.Controllers
 {
@@ -33,6 +34,23 @@ namespace TicketRewardSystem.Areas.Support.Controllers
         //    DataSourceResult result = tickets.ToDataSourceResult(request);
         //    return Json(result, JsonRequestBehavior.AllowGet);
         //}
+
+        public ActionResult Details(int id)
+        {
+            var ticket = this.Data.Tickets.GetById(id);
+            var model = new TicketViewModel()
+            {
+                TicketId = ticket.TicketId,
+                Description = ticket.Description,
+                PostedBy = ticket.PostedBy.UserName,
+                PostedOn = ticket.PostedOn,
+                Priority = ticket.Priority.ToString(),
+                Status = ticket.Status,
+                Title = ticket.Title
+            };
+
+            return View(model);
+        }
 
         public ActionResult ReadAllTickets([DataSourceRequest]DataSourceRequest request, string a)
         {
@@ -67,13 +85,8 @@ namespace TicketRewardSystem.Areas.Support.Controllers
             this.Data.SaveChanges();
 
             List<Achievement> unlocked = ResolveRulesAndAchievements(officer);
-            if (unlocked.Count != 0)
-            {
-                ViewBag.UnlockedAchievements = unlocked;
-            }
 
-            // TODO: Change redirection
-            return View("Index");
+            return PartialView("_AchievementUnlocked", unlocked);           
         }
 
         private List<Achievement> ResolveRulesAndAchievements(ApplicationUser officer)

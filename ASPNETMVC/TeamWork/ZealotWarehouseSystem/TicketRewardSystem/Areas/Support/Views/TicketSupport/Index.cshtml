@@ -33,7 +33,7 @@
         .Resizable(resize => resize.Columns(true))
         .Columns(columns =>
             {
-                columns.Bound(ticket => ticket.Title).ClientTemplate("<a href='TicketSupport/Details/#: Id#'>#:Title#</a>");
+                columns.Bound(ticket => ticket.Title).ClientTemplate("<a href='/Support/TicketSupport/Details/#: Id#'>#:Title#</a>");
                 columns.Bound(ticket => ticket.PostedOn);
                 columns.Bound(ticket => ticket.PostedBy);
                 columns.Bound(ticket => ticket.AssignedTo);
@@ -44,16 +44,6 @@
         )
     </div>
 
-</div>
-<div id="achievements">
-    @if (ViewBag.UnlockedAchievements != null)
-    {
-        var list = ViewBag.UnlockedAchievements as List<TicketRewardSystem.Models.Achievement>;
-        foreach (var item in list)
-        {
-            <p><img src="@Url.Content(item.ImageUrl)" alt="Image" width="300px" height="55px" /></p>
-        }
-    }
 </div>
 
 <script id="client-template" type="text/x-kendo-template">
