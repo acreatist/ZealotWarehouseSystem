@@ -26,9 +26,9 @@ namespace TicketRewardSystem.Areas.Administration.Controllers
 
         public JsonResult GetAll()
         {
-            //var allAchievements = db.Achievements.All().Select(AchievementViewModel.FromAchievement);
-            //return Json(allAchievements, JsonRequestBehavior.AllowGet);
-            return null;
+            var allAchievements = db.Achievements.All().Select(AchievementViewModel.FromAchievement);
+            return Json(allAchievements, JsonRequestBehavior.AllowGet);
+            //return null;
         }
 
         // GET: /Administration/Achievements/Details/5
