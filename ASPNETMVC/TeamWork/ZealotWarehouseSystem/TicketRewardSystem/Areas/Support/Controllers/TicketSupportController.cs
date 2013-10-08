@@ -49,7 +49,7 @@ namespace TicketRewardSystem.Areas.Support.Controllers
             ticket.AssignedTo = currentSupportUser;
             ticket.Status = StatusEnum.InProgress;
             
-            Data.SaveChanges();
+            this.Data.SaveChanges();
             
             return RedirectToAction("Index");
         }
