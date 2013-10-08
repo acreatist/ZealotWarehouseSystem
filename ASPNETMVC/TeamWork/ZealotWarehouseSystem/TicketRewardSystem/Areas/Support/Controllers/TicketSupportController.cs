@@ -65,7 +65,8 @@ namespace TicketRewardSystem.Areas.Support.Controllers
                 PostedOn = ticket.PostedOn,
                 Priority = ticket.Priority.ToString(),
                 Status = ticket.Status,
-                Title = ticket.Title
+                Title = ticket.Title,
+                AssignedTo = ticket.AssignedTo.UserName
             };
 
             return View(model);

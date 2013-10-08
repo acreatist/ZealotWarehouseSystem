@@ -2,6 +2,7 @@
     ViewBag.Title = "Details";
 }
 @model TicketRewardSystem.ViewModels.TicketViewModel
+@using Microsoft.AspNet.Identity
 
 <div id="container-details">
     <div class="row">
@@ -42,10 +43,16 @@
                 <dd>@Model.PostedBy</dd>
 
             </dl>
+            
+            <dl class="dl-horizontal">
+                <dt>Assigned To:</dt>
+                <dd>@Model.AssignedTo</dd>
+            </dl>
+
             <dl class="dl-horizontal">
                 <dt>&nbsp;</dt>
                 <dd>
-                    @if (Model.Status == TicketRewardSystem.Models.StatusEnum.InProgress)
+                    @if ((Model.Status == TicketRewardSystem.Models.StatusEnum.InProgress) && (Model.AssignedTo == User.Identity.GetUserName()))
                     {
                                 <div id="link-resolve">
                                     @Ajax.ActionLink("Mark as Resolved", "ResolveTicket", new { id = Model.TicketId }, new AjaxOptions()
