@@ -9,9 +9,11 @@ using TicketRewardSystem.Areas.Administration.ViewModels;
 using TicketRewardSystem.Repository;
 using TicketRewardSystem.Models;
 using TicketRewardSystem.ViewModels;
+using Microsoft.AspNet.Identity;
 
 namespace TicketRewardSystem.Areas.Support.Controllers
 {
+    [Authorize(Roles="admin, support")]
     public class TicketSupportController : Controller
     {
         protected IUowData Data { set; get; }
@@ -67,6 +69,20 @@ namespace TicketRewardSystem.Areas.Support.Controllers
             var result = tickets.ToDataSourceResult(request);
 
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetMyAchievements([DataSourceRequest]DataSourceRequest request)
+        {
+            var currentUser = User.Identity.GetUserId();
+            var user = this.Data.Users.All().FirstOrDefault(u => u.Id == currentUser);
+            var achievements = user.Achievements.Select(a => new AchievementViewModel()
+                {
+                    AchievementId = a.AchievementId,
+                    ImageUrl = a.ImageUrl,
+                    Title = a.Title
+                });
+
+            return Json(achievements.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ResolveTicket(int id)

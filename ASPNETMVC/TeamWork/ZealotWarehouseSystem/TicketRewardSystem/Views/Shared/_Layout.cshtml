@@ -26,7 +26,7 @@
                         
                         @if (User.IsInRole("admin"))
                         {
-                           <li>@Html.ActionLink("Tickets", "Index", "TicketsAdmin", new { area = "Administration" }, null)</li>
+                           <li>@Html.ActionLink("Ticket Admin", "Index", "TicketsAdmin", new { area = "Administration" }, null)</li>
                            <li>@Html.ActionLink("Rules", "Index", "Rules", new { area = "Administration" }, null)</li>
                            <li>@Html.ActionLink("Achievements", "Index", "Achievements", new { area = "Administration" }, null)</li>
                            <li>@Html.ActionLink("User Roles", "Index", "Users", new { area = "Administration" }, null)</li>
