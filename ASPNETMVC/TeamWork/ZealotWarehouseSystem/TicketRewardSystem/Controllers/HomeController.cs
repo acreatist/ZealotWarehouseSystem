@@ -54,7 +54,8 @@ namespace TicketRewardSystem.Controllers
                 Title = ticket.Title,
                 Description = ticketDescription,
                 PostedOn = ticket.PostedOn,
-                PostedBy = ticket.PostedBy.UserName
+                PostedBy = ticket.PostedBy.UserName,
+                Status = ticket.Status
             };
 
             return View(ticketView);
