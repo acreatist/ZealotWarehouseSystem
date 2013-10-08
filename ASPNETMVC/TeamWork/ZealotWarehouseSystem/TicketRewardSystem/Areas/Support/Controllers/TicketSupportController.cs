@@ -37,6 +37,23 @@ namespace TicketRewardSystem.Areas.Support.Controllers
         //    return Json(result, JsonRequestBehavior.AllowGet);
         //}
 
+        public ActionResult GetTicket([DataSourceRequest]DataSourceRequest request, int id)
+        {
+
+            var username = this.User.Identity.GetUserName();
+            var userId = this.User.Identity.GetUserId();
+            var currentSupportUser = this.Data.Users.All().FirstOrDefault(x => x.Id == userId);
+         
+            var ticket = Data.Tickets.All().FirstOrDefault(x => x.TicketId == id);
+            
+            ticket.AssignedTo = currentSupportUser;
+            ticket.Status = StatusEnum.InProgress;
+            
+            this.Data.SaveChanges();
+            
+            return RedirectToAction("Index");
+        }
+
         public ActionResult Details(int id)
         {
             var ticket = this.Data.Tickets.GetById(id);
@@ -48,7 +65,8 @@ namespace TicketRewardSystem.Areas.Support.Controllers
                 PostedOn = ticket.PostedOn,
                 Priority = ticket.Priority.ToString(),
                 Status = ticket.Status,
-                Title = ticket.Title
+                Title = ticket.Title,
+                AssignedTo = ticket.AssignedTo.UserName
             };
 
             return View(model);
